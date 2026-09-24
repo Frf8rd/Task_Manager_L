@@ -1,12 +1,20 @@
 import { useState } from "react";
 import TaskForm from "./components/TaskForm";
 import Task from "./components/Task";
-import "./App.css";
+import "../src/App.css";
 
 let nextId = 1;
 
 function App() {
   const [tasks, setTasks] = useState([]);
+
+  const [filter, setFilter] = useState("all"); 
+
+  const visibleTasks = tasks.filter((task) => {
+    if (filter === "active") return !task.completed;
+    if (filter === "completed") return task.completed;
+    return true;
+    });
 
   function addTask(title) {
     const newTask = { id: nextId++, title, completed: false };
@@ -42,11 +50,16 @@ function App() {
         <p>Nu există sarcini momentan.</p>
       ) : (
         <ul>
-          {tasks.map((task) => (
+          {visibleTasks.map((task) => (
             <Task key={task.id} task={task} onToggle={toggleTask} onDelete={deleteTask} />
           ))}
         </ul>
       )}
+      <div className="filters">
+        <button onClick={() => setFilter("all")}>Toate</button>
+        <button onClick={() => setFilter("active")}>Active</button>
+        <button onClick={() => setFilter("completed")}>Finalizate</button>
+      </div>
     </main>
   );
 }
