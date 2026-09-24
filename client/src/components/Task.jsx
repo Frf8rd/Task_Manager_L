@@ -1,10 +1,17 @@
-function Task({ task }) {
+function Task({ task, onToggle, onDelete }) {
   return (
-    <li>
-      <span>
-        {task.completed ? "☑" : "☐"} {task.title}
-      </span>
-      <button type="button">Șterge</button>
+    <li className={task.completed ? "task--done" : ""}>
+      <label>
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={() => onToggle(task.id)}
+        />
+        {task.title}
+      </label>
+      <button type="button" onClick={() => onDelete(task.id)}>
+        Șterge
+      </button>
     </li>
   );
 }
